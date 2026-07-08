@@ -1,9 +1,8 @@
 import { defineConfig } from "vite";
 
-// Served from https://talserphos.github.io/2027tracker/ on GitHub Pages.
-// The base path must match the repository name.
+// Deployed to Netlify/Vercel, which serve from the domain root.
 export default defineConfig({
-  base: "/2027tracker/",
+  base: "/",
   build: {
     target: "es2020",
     assetsInlineLimit: 0,

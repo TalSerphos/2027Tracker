@@ -5,7 +5,7 @@ month-by-month scenario of how AI could sprint from stumbling agents to
 superintelligence, and the October-2027 branch point that splits into a
 **utopia (slowdown)** ending and a **dystopia (race)** ending.
 
-**Live site:** https://talserphos.github.io/2027tracker/
+**Live site:** deploy via Netlify or Vercel (see below).
 
 ## What it does
 
@@ -47,10 +47,22 @@ npm run preview
 
 Without these, the vote still works but is stored only in the visitor's browser.
 
-## Enabling GitHub Pages
+## Deploying (Netlify or Vercel)
 
-Repo **Settings → Pages → Source → "GitHub Actions"**. Every push to the
-deployment branch rebuilds and publishes automatically.
+The repo ships with both [`netlify.toml`](netlify.toml) and
+[`vercel.json`](vercel.json), and works with private repos on either free tier.
+
+- **Netlify:** New site → import this repo. Build settings are picked up from
+  `netlify.toml` (`npm run build` → `dist`). Add the two `VITE_SUPABASE_*` env
+  vars under Site settings → Environment variables.
+- **Vercel:** New project → import this repo. The Vite preset + `vercel.json`
+  handle the rest. Add the two `VITE_SUPABASE_*` env vars in project settings.
+
+Every push then rebuilds and publishes automatically.
+
+_A GitHub Pages workflow (`.github/workflows/deploy.yml`) is also included as an
+optional alternative — it runs only on manual dispatch and requires a public
+repo (or a paid plan for private-repo Pages)._
 
 ## Credits
 

@@ -1,10 +1,9 @@
 name: Deploy to GitHub Pages
 
+# The project deploys via Netlify/Vercel (see netlify.toml / vercel.json).
+# This GitHub Pages workflow is kept as an optional alternative and only runs
+# when triggered manually, so it doesn't fail on a private repo without Pages.
 on:
-  push:
-    branches:
-      - claude/ai-2027-timeline-tracker-ujqh4e
-      - main
   workflow_dispatch:
 
 permissions:

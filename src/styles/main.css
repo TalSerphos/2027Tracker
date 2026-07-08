@@ -120,15 +120,54 @@ a { color: inherit; }
 .hero-art {
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(180deg, rgba(5,6,10,0.55), rgba(5,6,10,0.85) 70%, var(--bg)),
-    var(--split);
-  background-size: cover;
-  background-position: center;
-  opacity: 0.7;
   z-index: -1;
-  mask-image: radial-gradient(120% 90% at 50% 30%, #000 40%, transparent 85%);
+  overflow: hidden;
+  mask-image: radial-gradient(130% 100% at 50% 35%, #000 45%, transparent 88%);
 }
+/* Soft drifting aurora blobs — pure CSS generative color. */
+.aurora {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.5;
+  mix-blend-mode: screen;
+}
+.aurora-a {
+  width: 60vw; height: 60vw; left: -8vw; top: -18vw;
+  background: radial-gradient(circle at 50% 50%, rgba(95,240,224,0.55), transparent 62%);
+  animation: auroraA 22s ease-in-out infinite alternate;
+}
+.aurora-b {
+  width: 62vw; height: 62vw; right: -12vw; bottom: -22vw;
+  background: radial-gradient(circle at 50% 50%, rgba(255,59,82,0.5), transparent 62%);
+  animation: auroraB 26s ease-in-out infinite alternate;
+}
+@keyframes auroraA { from { transform: translate(0,0) scale(1); } to { transform: translate(8vw,6vw) scale(1.15); } }
+@keyframes auroraB { from { transform: translate(0,0) scale(1.05); } to { transform: translate(-7vw,-5vw) scale(0.92); } }
+
+/* Forking light-streams: a single trunk splitting into gold/cyan (up) and
+   red (down), echoing the utopia/dystopia branch. Drawn once, animated in. */
+.hero-streams { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.85; }
+.hero-streams path {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 2600;
+  stroke-dashoffset: 2600;
+  animation: streamDraw 3.2s ease-out forwards;
+}
+.streams-up path { stroke: url(#streamUtop); }
+.streams-down path { stroke: url(#streamDyst); }
+.streams-up path:nth-child(2), .streams-down path:nth-child(2) { animation-delay: 0.15s; opacity: 0.7; }
+.streams-up path:nth-child(3), .streams-down path:nth-child(3) { animation-delay: 0.3s; opacity: 0.5; }
+.hero-streams .fork-node {
+  fill: #eaf0ff;
+  filter: drop-shadow(0 0 10px rgba(234,240,255,0.9));
+  animation: nodePulse 3s ease-in-out infinite;
+  animation-delay: 2.2s;
+}
+@keyframes streamDraw { to { stroke-dashoffset: 0; } }
+@keyframes nodePulse { 0%,100% { r: 5; opacity: 0.85; } 50% { r: 8; opacity: 1; } }
 .hero-inner { max-width: 900px; text-align: center; }
 .hero-title {
   font-size: clamp(2.4rem, 6.5vw, 5rem);
@@ -335,6 +374,12 @@ a { color: inherit; }
 }
 .ending-card.utopia::before { background: linear-gradient(90deg, var(--utop-a), var(--utop-b)); }
 .ending-card.dystopia::before { background: linear-gradient(90deg, var(--dyst-a), var(--dyst-b)); }
+.ending-art {
+  position: absolute; top: 0; left: 0; right: 0; height: 120px;
+  width: 100%; opacity: 0.5; pointer-events: none;
+  mask-image: linear-gradient(180deg, #000 20%, transparent 100%);
+}
+.ending-card > *:not(.ending-art) { position: relative; }
 .ending-badge {
   display: inline-block; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase;
   padding: 0.25rem 0.7rem; border-radius: 999px; margin-bottom: 0.8rem;
@@ -390,5 +435,8 @@ a { color: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .scroll-hint span { animation: none; }
+  .scroll-hint span,
+  .aurora,
+  .hero-streams .fork-node { animation: none; }
+  .hero-streams path { animation: none; stroke-dashoffset: 0; }
 }

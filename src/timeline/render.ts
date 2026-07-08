@@ -69,6 +69,57 @@ export function createEndingsSection(): HTMLElement {
   section.id = "endings";
   section.className = "section endings-section";
 
+  // Small hand-drawn SVG motif per ending: a luminous skyline for utopia,
+  // a dark machine lattice for dystopia. Pure inline SVG, no assets.
+  const endingArt = (kind: "utopia" | "dystopia") => {
+    if (kind === "utopia") {
+      return /* html */ `
+        <svg class="ending-art" viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs>
+            <linearGradient id="uSky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#5ff0e0" stop-opacity="0.35"/>
+              <stop offset="1" stop-color="#ffd36e" stop-opacity="0.05"/>
+            </linearGradient>
+          </defs>
+          <circle cx="320" cy="42" r="26" fill="#ffd36e" opacity="0.55"/>
+          <circle cx="320" cy="42" r="40" fill="#ffd36e" opacity="0.12"/>
+          <g fill="url(#uSky)" stroke="#5ff0e0" stroke-opacity="0.5">
+            <rect x="30" y="70" width="24" height="50"/>
+            <rect x="62" y="52" width="20" height="68"/>
+            <rect x="90" y="80" width="18" height="40"/>
+            <rect x="116" y="40" width="22" height="80"/>
+            <rect x="146" y="64" width="18" height="56"/>
+            <rect x="172" y="78" width="26" height="42"/>
+            <rect x="206" y="50" width="20" height="70"/>
+            <rect x="234" y="72" width="18" height="48"/>
+          </g>
+          <g fill="#5ff0e0" opacity="0.8">
+            <circle cx="40" cy="26" r="1.5"/><circle cx="110" cy="18" r="1.5"/>
+            <circle cx="180" cy="30" r="1.5"/><circle cx="250" cy="20" r="1.5"/>
+          </g>
+        </svg>`;
+    }
+    return /* html */ `
+      <svg class="ending-art" viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <radialGradient id="dCore" cx="0.72" cy="0.35" r="0.5">
+            <stop offset="0" stop-color="#ff3b52" stop-opacity="0.6"/>
+            <stop offset="1" stop-color="#ff3b52" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect x="0" y="0" width="400" height="120" fill="url(#dCore)"/>
+        <g stroke="#ff3b52" stroke-opacity="0.4" fill="none">
+          <path d="M0,90 L400,90 M0,60 L400,60 M0,30 L400,30"/>
+          <path d="M50,0 L50,120 M110,0 L110,120 M170,0 L170,120 M230,0 L230,120 M290,0 L290,120 M350,0 L350,120"/>
+        </g>
+        <g fill="#ff3b52">
+          <circle cx="110" cy="60" r="2.5"/><circle cx="230" cy="30" r="2.5"/>
+          <circle cx="290" cy="90" r="2.5"/><circle cx="170" cy="90" r="2.5"/>
+          <circle cx="288" cy="42" r="5" opacity="0.9"/>
+        </g>
+      </svg>`;
+  };
+
   const card = (key: "slowdown" | "race") => {
     const e = ENDINGS[key];
     const steps = e.steps
@@ -85,6 +136,7 @@ export function createEndingsSection(): HTMLElement {
       .join("");
     return /* html */ `
       <article class="ending-card glass ${e.kind}">
+        ${endingArt(e.kind)}
         <div class="ending-badge">${e.kind === "utopia" ? "Utopia" : "Dystopia"}</div>
         <h3>${e.label}</h3>
         <p class="ending-tagline">${e.tagline}</p>

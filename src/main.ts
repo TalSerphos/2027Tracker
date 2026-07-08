@@ -13,14 +13,43 @@ import { computeNow } from "./timeline/nowMarker";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const BASE = import.meta.env.BASE_URL;
-
 function createHero(): HTMLElement {
   const now = computeNow();
   const hero = document.createElement("header");
   hero.className = "hero";
   hero.innerHTML = /* html */ `
-    <div class="hero-art" style="--split:url('${BASE}assets/split.jpg')"></div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="aurora aurora-a"></div>
+      <div class="aurora aurora-b"></div>
+      <svg class="hero-streams" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="streamUtop" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#5ff0e0" stop-opacity="0"/>
+            <stop offset="0.5" stop-color="#5ff0e0" stop-opacity="0.9"/>
+            <stop offset="1" stop-color="#ffd36e" stop-opacity="0.9"/>
+          </linearGradient>
+          <linearGradient id="streamDyst" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#ff3b52" stop-opacity="0"/>
+            <stop offset="0.5" stop-color="#ff3b52" stop-opacity="0.85"/>
+            <stop offset="1" stop-color="#b3143a" stop-opacity="0.85"/>
+          </linearGradient>
+          <filter id="streamGlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="4"/>
+          </filter>
+        </defs>
+        <g filter="url(#streamGlow)" class="streams-up">
+          <path d="M-100,470 C420,470 560,300 1540,150" />
+          <path d="M-100,480 C440,480 580,360 1540,250" />
+          <path d="M-100,490 C460,490 600,410 1540,340" />
+        </g>
+        <g filter="url(#streamGlow)" class="streams-down">
+          <path d="M-100,470 C420,470 560,640 1540,780" />
+          <path d="M-100,480 C440,480 580,600 1540,690" />
+          <path d="M-100,490 C460,490 600,560 1540,600" />
+        </g>
+        <circle class="fork-node" cx="520" cy="482" r="6" />
+      </svg>
+    </div>
     <div class="hero-inner">
       <span class="eyebrow">Tracking the forecast at ai-2027.com</span>
       <h1 class="hero-title">
