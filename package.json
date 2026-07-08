@@ -1,0 +1,22 @@
+{
+  "name": "ai-2027-tracker",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A live tracker for the AI-2027 forecast: timeline, current-state marker, and utopia-vs-dystopia probabilities.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview --port 4173"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "gsap": "^3.12.5",
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.169.0",
+    "typescript": "^5.6.2",
+    "vite": "^5.4.8"
+  }
+}
