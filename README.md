@@ -5,7 +5,7 @@ month-by-month scenario of how AI could sprint from stumbling agents to
 superintelligence, and the October-2027 branch point that splits into a
 **utopia (slowdown)** ending and a **dystopia (race)** ending.
 
-**Live site:** deploy via Netlify or Vercel (see below).
+**Live site:** https://talserphos.github.io/2027tracker/
 
 ## What it does
 
@@ -47,22 +47,20 @@ npm run preview
 
 Without these, the vote still works but is stored only in the visitor's browser.
 
-## Deploying (Netlify or Vercel)
+## Deploying (GitHub Pages)
 
-The repo ships with both [`netlify.toml`](netlify.toml) and
-[`vercel.json`](vercel.json), and works with private repos on either free tier.
+The [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) workflow builds
+and publishes on every push. Two one-time settings are required:
 
-- **Netlify:** New site → import this repo. Build settings are picked up from
-  `netlify.toml` (`npm run build` → `dist`). Add the two `VITE_SUPABASE_*` env
-  vars under Site settings → Environment variables.
-- **Vercel:** New project → import this repo. The Vite preset + `vercel.json`
-  handle the rest. Add the two `VITE_SUPABASE_*` env vars in project settings.
+1. **Make the repo public** (free-tier Pages only serves public repos), or use a
+   paid plan for private-repo Pages: Settings → General → Danger Zone →
+   *Change repository visibility*.
+2. **Enable Pages:** Settings → Pages → Source → **"GitHub Actions"**.
 
-Every push then rebuilds and publishes automatically.
-
-_A GitHub Pages workflow (`.github/workflows/deploy.yml`) is also included as an
-optional alternative — it runs only on manual dispatch and requires a public
-repo (or a paid plan for private-repo Pages)._
+After that, the site publishes automatically to
+`https://talserphos.github.io/2027tracker/`. To set the crowd-vote env vars, add
+`VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` as repo secrets (Settings →
+Secrets and variables → Actions).
 
 ## Credits
 
