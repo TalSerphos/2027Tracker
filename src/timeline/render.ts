@@ -1,7 +1,7 @@
-import { TIMELINE, MILESTONE_LABELS } from "../data/timeline";
+import { TIMELINE, MILESTONE_LABELS, FULFILLMENT_LABELS } from "../data/timeline";
 import { ENDINGS } from "../data/endings";
 import { REALITY_LOG, REALITY_AS_OF, VERDICT_LABELS } from "../data/realityLog";
-import { computeNow } from "./nowMarker";
+import { computeNow, computeScenarioProgress, computeLagMonths } from "./nowMarker";
 
 // Renders the scroll-driven timeline, the "you are here" marker, the two
 // endings, and the reality-check log. Pure DOM — GSAP/ScrollTrigger animate it
@@ -13,6 +13,8 @@ function fmtDate(iso: string): string {
 
 export function createTimelineSection(): HTMLElement {
   const now = computeNow();
+  const scenario = computeScenarioProgress();
+  const lag = computeLagMonths();
 
   const section = document.createElement("section");
   section.id = "timeline";
@@ -23,16 +25,22 @@ export function createTimelineSection(): HTMLElement {
       ? `<span class="milestone-tag">◆ ${MILESTONE_LABELS[e.milestone]}</span>`
       : "";
     const branchClass = e.isBranch ? " is-branch" : "";
+    const status = e.status ?? "pending";
+    const statusPill =
+      status !== "pending"
+        ? `<span class="status-pill status-${status}">${FULFILLMENT_LABELS[status]}</span>`
+        : "";
     const highlights = e.highlights
       .map((h) => `<li>${h}</li>`)
       .join("");
     return /* html */ `
-      <article class="tl-item${branchClass}" data-index="${i}" id="tl-${e.id}">
+      <article class="tl-item${branchClass} fs-${status}" data-index="${i}" id="tl-${e.id}">
         <div class="tl-marker"><span class="tl-dot"></span></div>
         <div class="tl-card glass">
           <div class="tl-card-head">
             <span class="tl-period">${e.period}</span>
             <span class="tl-date">${fmtDate(e.date)}</span>
+            ${statusPill}
           </div>
           <h3 class="tl-title">${e.title} ${milestoneTag}</h3>
           <p class="tl-summary">${e.summary}</p>
@@ -45,6 +53,13 @@ export function createTimelineSection(): HTMLElement {
     `;
   }).join("");
 
+  const lagNote =
+    lag != null && lag > 0
+      ? `The real world is tracking about <strong>${lag} month${lag === 1 ? "" : "s"} behind</strong> the forecast's pace.`
+      : lag != null && lag < 0
+        ? `The real world is running about <strong>${-lag} month${lag === -1 ? "" : "s"} ahead</strong> of the forecast.`
+        : `The real world is roughly <strong>on pace</strong> with the forecast.`;
+
   section.innerHTML = /* html */ `
     <div class="section-head">
       <span class="eyebrow">The Forecast</span>
@@ -52,11 +67,18 @@ export function createTimelineSection(): HTMLElement {
       <p class="lede">
         A month-by-month scenario from the AI-2027 team — from today's stumbling
         agents to a superhuman AI researcher, and the choice that follows.
-        <span class="now-chip">You are here: ${now.label}</span>
       </p>
+      <div class="marker-legend">
+        <span class="now-chip chip-real">🕒 Real time · ${now.label}</span>
+        <span class="now-chip chip-scenario">✓ Scenario progress · ${scenario.label}</span>
+      </div>
+      <p class="marker-gap">${lagNote}</p>
     </div>
-    <div class="timeline" data-now-index="${now.index}">
-      <div class="tl-spine"><div class="tl-spine-fill" style="height:${(now.overall * 100).toFixed(1)}%"></div></div>
+    <div class="timeline" data-now-index="${now.index}" data-scenario-index="${scenario.index}">
+      <div class="tl-spine">
+        <div class="tl-spine-fill scenario" style="height:${(scenario.overall * 100).toFixed(1)}%"></div>
+        <div class="tl-spine-fill realtime" style="top:${(scenario.overall * 100).toFixed(1)}%;height:${(Math.max(0, now.overall - scenario.overall) * 100).toFixed(1)}%"></div>
+      </div>
       ${items}
     </div>
   `;

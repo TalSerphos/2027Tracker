@@ -1,4 +1,5 @@
 import { TIMELINE } from "../data/timeline";
+import type { TimelineEntry } from "../data/timeline";
 
 // Works out where "now" falls along the forecast timeline, so the marker
 // advances automatically over time without any manual editing.
@@ -18,6 +19,47 @@ export interface NowPosition {
   label: string;
   /** True once we're at/after the final (branch) entry. */
   atBranch: boolean;
+}
+
+export interface ScenarioProgress {
+  /** Index of the last prediction judged "fulfilled" (‑1 if none). */
+  index: number;
+  /** The last fulfilled entry, if any. */
+  entry?: TimelineEntry;
+  /** Fraction (0–1) across the whole timeline of the fulfilled point. */
+  overall: number;
+  /** Human label, e.g. "Fulfilled through Mid 2025". */
+  label: string;
+}
+
+/** Where the *forecast* has actually come true — the last "fulfilled" entry. */
+export function computeScenarioProgress(): ScenarioProgress {
+  let index = -1;
+  for (let i = 0; i < TIMELINE.length; i++) {
+    if (TIMELINE[i].status === "fulfilled") index = i;
+  }
+  const times = TIMELINE.map((e) => new Date(e.date).getTime());
+  const first = times[0];
+  const last = times[times.length - 1];
+  if (index < 0) {
+    return { index, overall: 0, label: "No predictions fulfilled yet" };
+  }
+  const entry = TIMELINE[index];
+  const overall = (times[index] - first) / (last - first);
+  return { index, entry, overall, label: `Fulfilled through ${entry.period}` };
+}
+
+/**
+ * How far the real world lags (or leads) the forecast: the gap in whole months
+ * between today and the last fulfilled prediction's forecast date.
+ */
+export function computeLagMonths(now: Date = new Date()): number | null {
+  const sp = computeScenarioProgress();
+  if (!sp.entry) return null;
+  const d = new Date(sp.entry.date);
+  return Math.round(
+    (now.getFullYear() - d.getFullYear()) * 12 + (now.getMonth() - d.getMonth()),
+  );
 }
 
 export function computeNow(now: Date = new Date()): NowPosition {

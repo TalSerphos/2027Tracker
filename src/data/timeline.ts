@@ -4,6 +4,20 @@
 
 export type Milestone = "SC" | "SAR" | "SIAR" | "ASI";
 
+// Curated judgement of whether a predicted period has actually come to pass.
+// Edit these over time; the "scenario progress" marker sits at the last
+// `fulfilled` entry. Anything unset is treated as "pending".
+export type FulfillmentStatus = "fulfilled" | "partial" | "pending";
+
+export const FULFILLMENT_LABELS: Record<FulfillmentStatus, string> = {
+  fulfilled: "Fulfilled",
+  partial: "Partly true",
+  pending: "Not yet",
+};
+
+/** When the fulfillment judgements below were last reviewed. */
+export const FULFILLMENT_AS_OF = "2026-07";
+
 export interface TimelineEntry {
   /** Stable id used for anchors / the "now" marker. */
   id: string;
@@ -19,6 +33,8 @@ export interface TimelineEntry {
   highlights: string[];
   /** Optional capability milestone reached at this point. */
   milestone?: Milestone;
+  /** Curated: has this prediction actually happened yet? Defaults to "pending". */
+  status?: FulfillmentStatus;
   /** Link to the relevant part of the original forecast. */
   source: string;
   /** true for the branch/divergence entry. */
@@ -36,6 +52,7 @@ export const MILESTONE_LABELS: Record<Milestone, string> = {
 export const TIMELINE: TimelineEntry[] = [
   {
     id: "mid-2025",
+    status: "fulfilled",
     period: "Mid 2025",
     date: "2025-07-01",
     title: "Stumbling Agents",
@@ -50,6 +67,7 @@ export const TIMELINE: TimelineEntry[] = [
   },
   {
     id: "late-2025",
+    status: "partial",
     period: "Late 2025",
     date: "2025-11-01",
     title: "The World's Most Expensive AI",

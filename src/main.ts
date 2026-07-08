@@ -9,12 +9,13 @@ import {
 } from "./timeline/render";
 import { createProbabilitySection } from "./probability/slider";
 import { MILESTONES, MILESTONE_LABELS } from "./data/timeline";
-import { computeNow } from "./timeline/nowMarker";
+import { computeNow, computeScenarioProgress } from "./timeline/nowMarker";
 
 gsap.registerPlugin(ScrollTrigger);
 
 function createHero(): HTMLElement {
   const now = computeNow();
+  const scenario = computeScenarioProgress();
   const hero = document.createElement("header");
   hero.className = "hero";
   hero.innerHTML = /* html */ `
@@ -62,10 +63,17 @@ function createHero(): HTMLElement {
         a live tracker: where we are, what was predicted, and how likely each
         ending looks.
       </p>
-      <div class="hero-now glass">
-        <span class="hero-now-label">Right now, we are</span>
-        <span class="hero-now-value">${now.label}</span>
-        <span class="hero-now-meta">${(now.overall * 100).toFixed(0)}% of the way to the branch point</span>
+      <div class="hero-markers">
+        <div class="hero-now glass marker-real">
+          <span class="hero-now-label">🕒 Real time</span>
+          <span class="hero-now-value">${now.label}</span>
+          <span class="hero-now-meta">${(now.overall * 100).toFixed(0)}% of the way to the branch point</span>
+        </div>
+        <div class="hero-now glass marker-scenario">
+          <span class="hero-now-label">✓ Scenario progress</span>
+          <span class="hero-now-value">${scenario.entry ? scenario.entry.period : "—"}</span>
+          <span class="hero-now-meta">predictions fulfilled so far</span>
+        </div>
       </div>
       <div class="hero-cta">
         <a class="btn btn-primary" href="#timeline">Explore the timeline</a>
@@ -159,36 +167,42 @@ function setupAnimations() {
     });
   });
 
-  // Animate the spine fill as you scroll the timeline.
-  const fill = document.querySelector<HTMLElement>(".tl-spine-fill");
-  const timeline = document.querySelector<HTMLElement>(".timeline");
-  if (fill && timeline) {
+  // Grow both spine fills in as the timeline scrolls into view.
+  gsap.utils.toArray<HTMLElement>(".tl-spine-fill").forEach((fill) => {
     const target = fill.style.height;
-    fill.style.height = "0%";
-    gsap.to(fill, {
-      height: target,
-      ease: "none",
-      scrollTrigger: {
-        trigger: timeline,
-        start: "top 60%",
-        end: "bottom 80%",
-        scrub: 0.5,
+    gsap.from(fill, {
+      height: "0%",
+      duration: 1.1,
+      ease: "power2.out",
+      scrollTrigger: { trigger: ".timeline", start: "top 70%" },
+      onComplete: () => {
+        fill.style.height = target;
       },
     });
-  }
+  });
 }
 
-// Highlight the timeline entry we're currently at.
+// Highlight the two "you are here" entries: real-time and scenario progress.
 function markNow() {
   const now = computeNow();
-  const el = document.querySelector<HTMLElement>(`.timeline .tl-item[data-index="${now.index}"]`);
-  if (el) {
-    el.classList.add("is-now");
+  const scenario = computeScenarioProgress();
+
+  const addBadge = (index: number, cls: string, text: string) => {
+    const el = document.querySelector<HTMLElement>(
+      `.timeline .tl-item[data-index="${index}"]`,
+    );
+    if (!el) return;
+    el.classList.add(cls);
     const badge = document.createElement("span");
-    badge.className = "now-badge";
-    badge.textContent = "You are here";
+    badge.className = `now-badge ${cls}-badge`;
+    badge.textContent = text;
     el.querySelector(".tl-card-head")?.appendChild(badge);
-  }
+  };
+
+  // Scenario marker first, so if both land on the same card the real-time
+  // badge appears last (leftmost emphasis stays on "today").
+  if (scenario.index >= 0) addBadge(scenario.index, "is-scenario", "✓ Scenario is here");
+  addBadge(now.index, "is-now", "🕒 Real time");
 }
 
 if (document.readyState === "loading") {

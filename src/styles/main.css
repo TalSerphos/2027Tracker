@@ -246,22 +246,50 @@ a { color: inherit; }
 @keyframes scrolldot { 0%,100%{opacity:0;top:8px} 50%{opacity:1;top:20px} }
 
 /* ---------- timeline ---------- */
+.marker-legend { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.1rem; }
 .now-chip {
-  display: inline-block; margin-left: 0.4rem;
-  padding: 0.15rem 0.7rem; border-radius: 999px;
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.3rem 0.8rem; border-radius: 999px;
   font-size: 0.82rem; font-family: var(--mono);
   background: rgba(95,240,224,0.12); color: var(--utop-b);
   border: 1px solid rgba(95,240,224,0.3);
 }
+.now-chip.chip-real { background: rgba(95,240,224,0.12); color: var(--utop-b); border-color: rgba(95,240,224,0.35); }
+.now-chip.chip-scenario { background: rgba(255,211,110,0.12); color: var(--utop-a); border-color: rgba(255,211,110,0.35); }
+.marker-gap { margin: 0.9rem 0 0; font-size: 0.98rem; color: var(--ink-dim); }
+.marker-gap strong { color: var(--ink); }
+
+/* two hero marker cards */
+.hero-markers { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; }
+.hero-now.marker-real { border-color: rgba(95,240,224,0.4); }
+.hero-now.marker-scenario { border-color: rgba(255,211,110,0.4); }
+.hero-now.marker-real .hero-now-value { color: var(--utop-b); }
+.hero-now.marker-scenario .hero-now-value { color: var(--utop-a); }
+
+/* per-card fulfillment status pill */
+.status-pill {
+  font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.12rem 0.5rem; border-radius: 999px; margin-left: auto;
+}
+.status-fulfilled { background: rgba(255,211,110,0.16); color: var(--utop-a); border: 1px solid rgba(255,211,110,0.35); }
+.status-partial { background: rgba(150,170,220,0.14); color: var(--ink-dim); border: 1px solid var(--line); }
 .timeline { position: relative; padding-left: 2.4rem; }
 .tl-spine {
   position: absolute; left: 11px; top: 6px; bottom: 6px; width: 2px;
   background: var(--line); border-radius: 2px; overflow: hidden;
 }
-.tl-spine-fill {
-  position: absolute; top: 0; left: 0; width: 100%;
-  background: linear-gradient(180deg, var(--utop-b), var(--dyst-a));
-  box-shadow: 0 0 12px rgba(95,240,224,0.6);
+.tl-spine-fill { position: absolute; left: 0; width: 100%; }
+/* Gold = the portion of the forecast that has actually come true. */
+.tl-spine-fill.scenario {
+  top: 0;
+  background: linear-gradient(180deg, var(--utop-a), var(--utop-b));
+  box-shadow: 0 0 12px rgba(255,211,110,0.7);
+}
+/* Cyan = calendar time that has passed but is not yet fulfilled (the gap). */
+.tl-spine-fill.realtime {
+  background: repeating-linear-gradient(
+    180deg, var(--utop-b), var(--utop-b) 4px, rgba(95,240,224,0.35) 4px, rgba(95,240,224,0.35) 8px);
+  box-shadow: 0 0 10px rgba(95,240,224,0.5);
 }
 .tl-item { position: relative; padding: 0 0 2.2rem 0; }
 .tl-marker { position: absolute; left: -2.4rem; top: 6px; }
@@ -295,6 +323,13 @@ a { color: inherit; }
   padding: 0.1rem 0.55rem; border-radius: 999px;
   background: var(--utop-b); color: #06131a; font-weight: 700;
 }
+.now-badge.is-scenario-badge { background: var(--utop-a); }
+/* scenario "you are here" dot (gold) vs real-time dot (cyan) */
+.tl-item.is-scenario .tl-dot {
+  border-color: var(--utop-a); background: var(--utop-a);
+  box-shadow: 0 0 0 6px rgba(255,211,110,0.16), 0 0 18px rgba(255,211,110,0.7);
+}
+.tl-item.is-scenario .tl-card { border-color: rgba(255,211,110,0.4); }
 .tl-title { font-size: 1.35rem; margin: 0 0 0.6rem; letter-spacing: -0.01em; }
 .milestone-tag {
   font-size: 0.72rem; font-family: var(--mono); vertical-align: middle;
