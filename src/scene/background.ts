@@ -60,10 +60,11 @@ const fragmentShader = /* glsl */ `
     vec3 utop = mix(uUtopiaA, uUtopiaB, vSeed);
     vec3 col = mix(dyst, utop, uMix);
 
-    // Fade with depth and give a subtle core glow.
-    float glow = pow(alpha, 1.6);
-    col += glow * 0.35;
-    float a = alpha * (0.35 + 0.65 * (1.0 - vDepth));
+    // Fade with depth and give a subtle core glow. Kept dim so text stays
+    // legible over the field even where particles cluster (additive blending).
+    float glow = pow(alpha, 1.8);
+    col += glow * 0.18;
+    float a = alpha * (0.16 + 0.34 * (1.0 - vDepth));
     gl_FragColor = vec4(col, a);
   }
 `;
@@ -83,8 +84,8 @@ export function initBackground(canvas: HTMLCanvasElement): () => void {
 
   // Build the particle cloud.
   const COUNT = Math.min(
-    9000,
-    Math.max(2500, Math.floor(window.innerWidth * window.innerHeight * 0.006)),
+    5500,
+    Math.max(2000, Math.floor(window.innerWidth * window.innerHeight * 0.0035)),
   );
   const positions = new Float32Array(COUNT * 3);
   const scales = new Float32Array(COUNT);

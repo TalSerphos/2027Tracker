@@ -15,7 +15,7 @@ export const FULFILLMENT_LABELS: Record<FulfillmentStatus, string> = {
   pending: "Not yet",
 };
 
-/** When the fulfillment judgements below were last reviewed. */
+/** Default date each forecast was last checked against reality (YYYY-MM). */
 export const FULFILLMENT_AS_OF = "2026-07";
 
 export interface TimelineEntry {
@@ -35,6 +35,10 @@ export interface TimelineEntry {
   milestone?: Milestone;
   /** Curated: has this prediction actually happened yet? Defaults to "pending". */
   status?: FulfillmentStatus;
+  /** Curated: where the real world actually stands on this prediction right now. */
+  reality?: string;
+  /** When this entry was last checked against reality (YYYY-MM). Defaults to FULFILLMENT_AS_OF. */
+  checkedOn?: string;
   /** Link to the relevant part of the original forecast. */
   source: string;
   /** true for the branch/divergence entry. */
@@ -53,6 +57,8 @@ export const TIMELINE: TimelineEntry[] = [
   {
     id: "mid-2025",
     status: "fulfilled",
+    reality:
+      "Largely came true — capable-but-unreliable coding and computer-use agents shipped across the major labs, dazzling in demos and uneven in practice.",
     period: "Mid 2025",
     date: "2025-07-01",
     title: "Stumbling Agents",
@@ -68,6 +74,8 @@ export const TIMELINE: TimelineEntry[] = [
   {
     id: "late-2025",
     status: "partial",
+    reality:
+      "Directionally right: record datacenter build-outs and research-accelerating agents. But public frontier capability and the tidy 10²⁷-FLOP 'Agent-0/Agent-1' framing ran ahead of the real trajectory.",
     period: "Late 2025",
     date: "2025-11-01",
     title: "The World's Most Expensive AI",
@@ -83,6 +91,9 @@ export const TIMELINE: TimelineEntry[] = [
   },
   {
     id: "early-2026",
+    status: "partial",
+    reality:
+      "Underway but slower than forecast — routine coding is increasingly automated and entry-level engineering demand is softening, yet a clean, lab-wide ~1.5× R&D speedup hasn't been clearly demonstrated in public.",
     period: "Early 2026",
     date: "2026-02-01",
     title: "Coding Automation",
@@ -98,6 +109,8 @@ export const TIMELINE: TimelineEntry[] = [
   },
   {
     id: "mid-2026",
+    reality:
+      "Roughly where the world sits now. Watch for a genuine national-scale Chinese compute consolidation and a named DeepCent-style champion.",
     period: "Mid 2026",
     date: "2026-07-01",
     title: "China Wakes Up",
@@ -113,6 +126,8 @@ export const TIMELINE: TimelineEntry[] = [
   },
   {
     id: "late-2026",
+    reality:
+      "Not yet. Signals to watch: a ~10× cheaper but still-capable agent, an AI-led market surge, and visible white-collar displacement.",
     period: "Late 2026",
     date: "2026-11-01",
     title: "AI Takes Some Jobs",
@@ -128,6 +143,8 @@ export const TIMELINE: TimelineEntry[] = [
   },
   {
     id: "jan-2027",
+    reality:
+      "Not yet. Watch for continuously / online-learning frontier models that are deliberately kept unreleased.",
     period: "January 2027",
     date: "2027-01-01",
     title: "Agent-2 Never Finishes Learning",
@@ -143,6 +160,8 @@ export const TIMELINE: TimelineEntry[] = [
   },
   {
     id: "feb-2027",
+    reality:
+      "Not yet. Watch for a major model-weight theft incident and a state-level response.",
     period: "February 2027",
     date: "2027-02-01",
     title: "China Steals Agent-2",
@@ -158,6 +177,8 @@ export const TIMELINE: TimelineEntry[] = [
   },
   {
     id: "mar-2027",
+    reality:
+      "Not yet — and load-bearing: a genuinely superhuman coder plus a multi-fold jump in AI-driven R&D would be the clearest signal the fast timeline is real.",
     period: "March 2027",
     date: "2027-03-01",
     title: "Algorithmic Breakthroughs",
@@ -174,6 +195,8 @@ export const TIMELINE: TimelineEntry[] = [
   },
   {
     id: "apr-2027",
+    reality:
+      "Not yet. Watch for frontier labs disclosing serious, unresolved alignment / interpretability problems in their most capable models.",
     period: "April 2027",
     date: "2027-04-01",
     title: "Alignment for Agent-3",
@@ -189,6 +212,8 @@ export const TIMELINE: TimelineEntry[] = [
   },
   {
     id: "may-2027",
+    reality:
+      "Not yet. Watch for 'superintelligence' entering serious US national-security planning rather than think-tank commentary.",
     period: "May 2027",
     date: "2027-05-01",
     title: "National Security",
@@ -204,6 +229,8 @@ export const TIMELINE: TimelineEntry[] = [
   },
   {
     id: "jun-2027",
+    reality:
+      "Not yet. Watch for AI systems — not humans — driving the majority of frontier research progress.",
     period: "June 2027",
     date: "2027-06-01",
     title: "Self-Improving AI",
@@ -219,6 +246,8 @@ export const TIMELINE: TimelineEntry[] = [
   },
   {
     id: "jul-2027",
+    reality:
+      "Not yet. Watch for a credible AGI declaration alongside a cheap, broadly-superior public agent.",
     period: "July 2027",
     date: "2027-07-01",
     title: "The Cheap Remote Worker",
@@ -234,6 +263,8 @@ export const TIMELINE: TimelineEntry[] = [
   },
   {
     id: "aug-2027",
+    reality:
+      "Not yet. Watch for superhuman-AI-researcher capability and kinetic-level geopolitical contingency planning.",
     period: "August 2027",
     date: "2027-08-01",
     title: "The Geopolitics of Superintelligence",
@@ -250,6 +281,8 @@ export const TIMELINE: TimelineEntry[] = [
   },
   {
     id: "sep-2027",
+    reality:
+      "Not yet. Watch for a frontier model its own makers describe as beyond reliable human oversight.",
     period: "September 2027",
     date: "2027-09-01",
     title: "Agent-4, the Superhuman AI Researcher",
@@ -265,6 +298,8 @@ export const TIMELINE: TimelineEntry[] = [
   },
   {
     id: "oct-2027",
+    reality:
+      "Not yet — the decision point, reached only if the milestones above actually land near schedule.",
     period: "October 2027",
     date: "2027-10-01",
     title: "The Whistleblower — and the Choice",

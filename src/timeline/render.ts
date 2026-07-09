@@ -1,4 +1,9 @@
-import { TIMELINE, MILESTONE_LABELS, FULFILLMENT_LABELS } from "../data/timeline";
+import {
+  TIMELINE,
+  MILESTONE_LABELS,
+  FULFILLMENT_LABELS,
+  FULFILLMENT_AS_OF,
+} from "../data/timeline";
 import { ENDINGS } from "../data/endings";
 import { REALITY_LOG, REALITY_AS_OF, VERDICT_LABELS } from "../data/realityLog";
 import { computeNow, computeScenarioProgress, computeLagMonths } from "./nowMarker";
@@ -26,13 +31,23 @@ export function createTimelineSection(): HTMLElement {
       : "";
     const branchClass = e.isBranch ? " is-branch" : "";
     const status = e.status ?? "pending";
-    const statusPill =
-      status !== "pending"
-        ? `<span class="status-pill status-${status}">${FULFILLMENT_LABELS[status]}</span>`
-        : "";
+    const statusPill = `<span class="status-pill status-${status}">${FULFILLMENT_LABELS[status]}</span>`;
     const highlights = e.highlights
       .map((h) => `<li>${h}</li>`)
       .join("");
+    const checked = e.checkedOn ?? FULFILLMENT_AS_OF;
+    const realityBlock = e.reality
+      ? /* html */ `
+          <div class="tl-reality">
+            <div class="tl-reality-head">
+              <span class="tl-reality-label">Where the world is now</span>
+              <span class="tl-reality-date" title="When this forecast was last checked against reality">
+                checked ${checked}
+              </span>
+            </div>
+            <p>${e.reality}</p>
+          </div>`
+      : "";
     return /* html */ `
       <article class="tl-item${branchClass} fs-${status}" data-index="${i}" id="tl-${e.id}">
         <div class="tl-marker"><span class="tl-dot"></span></div>
@@ -45,6 +60,7 @@ export function createTimelineSection(): HTMLElement {
           <h3 class="tl-title">${e.title} ${milestoneTag}</h3>
           <p class="tl-summary">${e.summary}</p>
           <ul class="tl-highlights">${highlights}</ul>
+          ${realityBlock}
           <a class="tl-source" href="${e.source}" target="_blank" rel="noopener">
             Read the original forecast ↗
           </a>

@@ -9,8 +9,8 @@
   --ink-dim: #9aa6c4;
   --ink-faint: #64708f;
   --line: rgba(150, 170, 220, 0.14);
-  --glass: rgba(14, 18, 32, 0.74);
-  --glass-strong: rgba(18, 22, 40, 0.88);
+  --glass: rgba(12, 16, 28, 0.88);
+  --glass-strong: rgba(16, 20, 36, 0.93);
 
   --utop-a: #ffd36e;
   --utop-b: #5ff0e0;
@@ -57,7 +57,7 @@ body {
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(120% 100% at 50% 40%, rgba(5, 6, 10, 0.30), rgba(5, 6, 10, 0.68) 70%, rgba(5, 6, 10, 0.82));
+    radial-gradient(120% 100% at 50% 40%, rgba(5, 6, 10, 0.50), rgba(5, 6, 10, 0.78) 65%, rgba(5, 6, 10, 0.90));
 }
 
 #app { position: relative; z-index: 1; }
@@ -96,7 +96,8 @@ a { color: inherit; }
   margin: 0 0 1rem;
   letter-spacing: -0.02em;
 }
-.lede { font-size: 1.12rem; color: var(--ink-dim); margin: 0; }
+.lede { font-size: 1.12rem; color: #c4cde2; margin: 0; text-shadow: 0 1px 10px rgba(3, 5, 10, 0.65); }
+.section-head h2 { text-shadow: 0 2px 18px rgba(3, 5, 10, 0.6); }
 
 .grad-utop {
   background: linear-gradient(120deg, var(--utop-a), var(--utop-b));
@@ -178,10 +179,12 @@ a { color: inherit; }
 }
 .hero-sub {
   font-size: clamp(1.02rem, 2vw, 1.28rem);
-  color: var(--ink-dim);
+  color: #cdd6ea;
   max-width: 680px;
   margin: 0 auto 2rem;
+  text-shadow: 0 1px 14px rgba(3, 5, 10, 0.8), 0 0 30px rgba(3, 5, 10, 0.5);
 }
+.hero-title { text-shadow: 0 2px 24px rgba(3, 5, 10, 0.6); }
 .hero-now {
   display: inline-flex;
   flex-direction: column;
@@ -272,7 +275,29 @@ a { color: inherit; }
   padding: 0.12rem 0.5rem; border-radius: 999px; margin-left: auto;
 }
 .status-fulfilled { background: rgba(255,211,110,0.16); color: var(--utop-a); border: 1px solid rgba(255,211,110,0.35); }
-.status-partial { background: rgba(150,170,220,0.14); color: var(--ink-dim); border: 1px solid var(--line); }
+.status-partial { background: rgba(95,240,224,0.12); color: var(--utop-b); border: 1px solid rgba(95,240,224,0.3); }
+.status-pending { background: rgba(150,170,220,0.10); color: var(--ink-faint); border: 1px solid var(--line); }
+
+/* per-forecast "where the world is now" reality note */
+.tl-reality {
+  margin: 0 0 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background: rgba(8, 11, 20, 0.6);
+  border: 1px solid var(--line);
+  border-left: 3px solid rgba(95, 240, 224, 0.5);
+}
+.tl-reality-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.6rem; margin-bottom: 0.35rem; }
+.tl-reality-label {
+  font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--utop-b);
+}
+.tl-reality-date { font-family: var(--mono); font-size: 0.68rem; color: var(--ink-faint); white-space: nowrap; }
+.tl-reality p { margin: 0; font-size: 0.92rem; color: var(--ink-dim); }
+/* tint the reality accent by fulfillment status */
+.fs-fulfilled .tl-reality { border-left-color: rgba(255, 211, 110, 0.6); }
+.fs-fulfilled .tl-reality-label { color: var(--utop-a); }
+.fs-pending .tl-reality { border-left-color: rgba(150, 170, 220, 0.4); }
+.fs-pending .tl-reality-label { color: var(--ink-faint); }
 .timeline { position: relative; padding-left: 2.4rem; }
 .tl-spine {
   position: absolute; left: 11px; top: 6px; bottom: 6px; width: 2px;
