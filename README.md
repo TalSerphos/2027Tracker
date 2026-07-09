@@ -5,7 +5,7 @@ month-by-month scenario of how AI could sprint from stumbling agents to
 superintelligence, and the October-2027 branch point that splits into a
 **utopia (slowdown)** ending and a **dystopia (race)** ending.
 
-**Live site:** https://talserphos.github.io/2027tracker/
+**Live site:** https://talserphos.github.io/2027Tracker/
 
 ## What it does
 
@@ -58,7 +58,7 @@ and publishes on every push. Two one-time settings are required:
 2. **Enable Pages:** Settings → Pages → Source → **"GitHub Actions"**.
 
 After that, the site publishes automatically to
-`https://talserphos.github.io/2027tracker/`. To set the crowd-vote env vars, add
+`https://talserphos.github.io/2027Tracker/`. To set the crowd-vote env vars, add
 `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` as repo secrets (Settings →
 Secrets and variables → Actions).
 
