@@ -1,12 +1,14 @@
 name: Deploy to GitHub Pages
 
-# Requires: repo is public (or a paid plan) AND Settings → Pages → Source is
-# set to "GitHub Actions". Then every push to the branch below auto-deploys.
+# GitHub Pages deploys from the repository's DEFAULT branch only (that's what
+# the github-pages environment allows). The default branch is currently
+# `claude/ai-2027-timeline-tracker-ujqh4e`, so only that branch triggers a
+# deploy here. If you later set `main` as the default branch in Settings →
+# Branches, add it below.
 on:
   push:
     branches:
       - claude/ai-2027-timeline-tracker-ujqh4e
-      - main
   workflow_dispatch:
 
 permissions:
